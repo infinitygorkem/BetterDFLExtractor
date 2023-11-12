@@ -15,10 +15,13 @@ This project is licensed under the [MIT License](LICENSE.md).
 
 ## Installation
 1. Clone this repository into your DeepFaceLab directory:
+   `git clone https://github.com/Jackmjedi/BetterDFLExtractor .` in the DeepFaceLab directory.
    - For Windows: `_internal/DeepFaceLab`
    - For Linux: `DeepFaceLab_Linux/DeepFaceLab`
 2. Use Anaconda to create an environment using the `environment.yaml` file provided.
-3. Run `caller.py` in the DeepFaceLab folder to launch the extractor.
+   `conda env create -f environment.yaml`
+3. Run `python caller.py` in the DeepFaceLab folder to launch the extractor.
+4. Select video, then extract. After selecting your desired cluster and exporting, it will be placed in workspace/faces.
 
 ## Notes
 Please note that BetterDFLExtractor is an amateur product and is subject to further optimization. Future plans include:

@@ -268,13 +268,13 @@ class MainWindow(QMainWindow):
         temp_face_data_file = tempfile.NamedTemporaryFile(delete=False)
         temp_embedding_file = tempfile.NamedTemporaryFile(delete=False)
 
-        for frame_index, frame in enumerate(get_frames(self.video_path, self.fps)):
+        for actual_frame_number, frame in get_frames(self.video_path, self.fps):
             faces, params, roi_box_lst = detect_faces([frame], tddfa, face_boxes)
             landmarks = get_landmarks(params, roi_box_lst)
 
             for face_index, (face, landmark) in enumerate(zip(faces, landmarks)):
                 face_data_entry = {
-                    'frame_index': frame_index,
+                    'frame_index': actual_frame_number,
                     'face_index': face_index,
                     'face': face,
                     'landmark': landmark
@@ -461,6 +461,8 @@ class MainWindow(QMainWindow):
             dflimg.set_image_to_face_mat(image_to_face_mat)
             dflimg.save()
 
+        QMessageBox.information(self, "Exported", "Faces exported to workspace/faces folder.")
+
 
 def get_frames(video_path, fps=0):
     cap = cv2.VideoCapture(video_path)
@@ -481,7 +483,8 @@ def get_frames(video_path, fps=0):
             break
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         if frame_count % frame_interval == 0:
-            yield frame
+            actual_frame_number = frame_count
+            yield (actual_frame_number, frame)
             pbar.update(1)
         frame_count += 1
     
