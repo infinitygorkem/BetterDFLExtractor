@@ -268,6 +268,10 @@ class MainWindow(QMainWindow):
         temp_face_data_file = tempfile.NamedTemporaryFile(delete=False)
         temp_embedding_file = tempfile.NamedTemporaryFile(delete=False)
 
+        if not hasattr(self, "video_path"):
+            QMessageBox.warning(self, "No Video", "No video selected to extract from.")
+            return
+
         for actual_frame_number, frame in get_frames(self.video_path, self.fps):
             faces, params, roi_box_lst = detect_faces([frame], tddfa, face_boxes)
             landmarks = get_landmarks(params, roi_box_lst)
@@ -372,6 +376,8 @@ class MainWindow(QMainWindow):
         self.basePixmap = QPixmap.fromImage(q_image)
 
     def prevPage(self):
+        if not hasattr(self, "clusters"):
+            return
         self.totalPages = math.ceil(len(self.clusters) / 5)
         print(f"Current page: {self.currentPage}")
         if self.currentPage > 0:
@@ -379,6 +385,8 @@ class MainWindow(QMainWindow):
             self.display_clusters(self.all_faces, self.labels)
 
     def nextPage(self):
+        if not hasattr(self, "clusters"):
+            return
         self.totalPages = math.ceil(len(self.clusters) / 5)
         print(f"Current page: {self.currentPage}")
         if self.currentPage < self.totalPages - 1:
