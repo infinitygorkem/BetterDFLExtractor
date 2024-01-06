@@ -142,8 +142,8 @@ class MainWindow(QMainWindow):
         exportLayout.addRow(self.pngOutputCheckBox)
 
         self.framesSpinBox = QSpinBox()
-        self.framesSpinBox.setMinimum(1)
-        self.framesSpinBox.setValue(1)
+        self.framesSpinBox.setMinimum(0)
+        self.framesSpinBox.setValue(0)
         exportLayout.addRow(QLabel("FPS (How many frames per second will be extracted):"), self.framesSpinBox)
 
         exportGroupBox.setLayout(exportLayout)
@@ -437,6 +437,14 @@ class MainWindow(QMainWindow):
                 continue
 
             relative_path = os.path.join("../../..", "workspace")
+            if not os.path.isdir(relative_path):
+                #User might be on Linux where workspace is only 2 levels above
+                #instead of 3, if caller.py and associated files are moved into
+                #DeepFaceLab directory.
+                relative_path = os.path.join("../..", "workspace")
+                if not os.path.isdir(relative_path):
+                    QMessageBox.warning(self, "No workspace folder found", "No workspace folder found.")
+                    return
             filename = os.path.join(relative_path, "faces", f"cluster_{self.selected_cluster}/{frame_index}_{uuid.uuid4()}_{face_index}.jpg")
             os.makedirs(os.path.dirname(filename), exist_ok=True)
 
